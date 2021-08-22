@@ -1,0 +1,141 @@
+{% extends "layout_default.html" %}
+
+{% block content %}
+<script>
+/*
+test = setInterval(myTimer, 5000);
+
+function myTimer() {
+    alert('Hello');
+}
+*/
+    //---------------------------------------------------------------------------
+    //
+    function joinGamePrompt_onClick(){
+
+    }
+
+
+    //---------------------------------------------------------------------------
+    // Communicate with server APIs
+
+    function createGame_onClick(){
+        
+        // 1. Attempt to create game session/room
+        // 2. Redirect to the same page. The route will query the game room session details
+        
+        $.getJSON($SCRIPT_ROOT + '/_create_game_session', {
+
+        }, function(data) {
+            // TO-DO: Add XML parsing capability for JSON stuff
+            if(data.result == "0"){
+                alert("Ok");
+                window.location.href = '/game_board';
+                return false;
+            }else{
+                alert("Create Game Failed.");
+            }
+        });
+        
+    }
+    
+    function joinGame_onClick(){
+
+        game_session_code = document.getElementById("input_gamesessioncode").value;
+
+        $.getJSON($SCRIPT_ROOT + '/_join_game_session', {
+            game_session_code : game_session_code
+        }, function(data) {
+            //document.body.scrollTop = 0; // For Safari
+            //document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+            // TO-DO: Add XML parsing capability for JSON stuff
+            if(data.result == "0"){
+                alert("Ok");
+                window.location.href = '/game_board';
+                return false;
+            }else{
+                alert("Join Game Failed.");
+            }
+        });
+    }
+
+
+</script>
+
+{% if session_code == "" %}
+<!-- =============================================================================================== -->
+
+<div class="content-section" id="sec_mainlobby">
+    <button id="button_creategame"
+            type="button"
+            class="btn btn-info btn-lg btn-block"
+            onclick="createGame_onClick();"
+            >
+        Create Game
+    </button>
+
+    <button id="button_joingame"
+            type="button"
+            class="btn btn-info btn-lg btn-block"
+            onclick=""
+            data-toggle="modal"
+            data-target="#modals_gamesession_prompt"
+            >
+        Join Game
+    </button>
+
+</div>
+<!-- Modals -->
+<div class="modal fade" id="modals_gamesession_prompt" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <h4 class="modal-title">Enter Game Session Code</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+
+            <p class="small text-info font-italic"><!--Some text in the modal. --></p>
+
+            <div class="row form-group">
+                <!--
+                <div class="col-md-4">
+                Object type
+                    <div class="small text-info font-italic">
+                    *Alphanumeric and underscore characters allowed; no spaces
+                    </div>
+                </div>
+                -->
+                <div class="col-md-10">
+                    <input class='form-control' id="input_gamesessioncode" type="text" size="16">
+                </div>
+
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button id="objecttype_add" type="button" class="btn btn-default border-info" data-dismiss="modal" onclick="joinGame_onClick();">Join</button>
+          <button id="objecttype_cancel" type="button" class="btn btn-default border-info" data-dismiss="modal">Cancel</button>
+        </div>
+
+      </div>
+
+    </div>
+</div>
+
+
+
+{% else %}
+<!-- =============================================================================================== -->
+
+<div class="content-section" id="sec_creategamelobby">
+    {{ session_code }}
+</div>
+
+{% endif %}
+
+{% endblock content %}

@@ -15,6 +15,8 @@ def generateRunId():
     return secrets.token_hex(8) + "_" + now_str
     
 #==================================================================================
+
+
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=4, max=24)])
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -36,6 +38,8 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('That email is taken. Please choose a different one.')
 
 #==================================================================================
+
+
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=4, max=24)])
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -57,8 +61,9 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError('That email is taken. Please choose a different one.')
 
 #==================================================================================
+
+
 class LoginForm(FlaskForm):
-    
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=128)])
     remember = BooleanField('Remember Me')
@@ -66,6 +71,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
     
 #==================================================================================
+
+
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
@@ -73,6 +80,8 @@ class PostForm(FlaskForm):
     
     
 #==================================================================================
+
+
 class GenerateStoryForm(FlaskForm):
 
     runtime_threshold_choices = []
